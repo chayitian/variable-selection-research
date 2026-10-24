@@ -1,0 +1,49 @@
+{
+  "setting": {
+    "dataset": "sklearn iris",
+    "n_train": 112,
+    "n_test": 38,
+    "seed": 42
+  },
+  "agreement_with_sklearn": 1.0,
+  "scalings_abs_cos": [
+    1.0,
+    1.0000000000000002
+  ],
+  "explained_variance_ratio_ours": [
+    0.9927498889210888,
+    0.007250111078911113
+  ],
+  "evr_max_diff": 1.1102230246251565e-16,
+  "coef_max_diff": 17.07762870576898,
+  "train_acc": 0.9732142857142857,
+  "test_acc": 1.0,
+  "test_balanced_acc": 1.0,
+  "confusion_matrix": [
+    [
+      17,
+      0,
+      0
+    ],
+    [
+      0,
+      8,
+      0
+    ],
+    [
+      0,
+      0,
+      13
+    ]
+  ],
+  "labels": [
+    0,
+    1,
+    2
+  ],
+  "target_names": [
+    "setosa",
+    "versicolor",
+    "virginica"
+  ]
+}

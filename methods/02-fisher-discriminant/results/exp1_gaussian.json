@@ -1,0 +1,31 @@
+{
+  "setting": {
+    "p": 5,
+    "n_per_class": 200,
+    "n_test": 2000,
+    "cov": "I",
+    "seeds": "train=0, test=1"
+  },
+  "cases": [
+    {
+      "case": "well_separated",
+      "delta": 4.0,
+      "angle_deg": 3.3680925677269213,
+      "train_acc": 0.97,
+      "test_acc": 0.97475,
+      "test_err": 0.025249999999999995,
+      "bayes_err": 0.022750131948179195,
+      "threshold": -0.009309891986485942
+    },
+    {
+      "case": "hard",
+      "delta": 1.0,
+      "angle_deg": 8.247870002523804,
+      "train_acc": 0.6725,
+      "test_acc": 0.68225,
+      "test_err": 0.31775,
+      "bayes_err": 0.3085375387259869,
+      "threshold": -0.015218489738677236
+    }
+  ]
+}

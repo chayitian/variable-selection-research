@@ -1,0 +1,21 @@
+{
+  "setting": {
+    "p": 100,
+    "n_per_class": 30,
+    "seed": 0,
+    "perturbation": "1e-10"
+  },
+  "rank_Sw": 58,
+  "full_rank": 100,
+  "rank_limit_err": 0.6313538669701839,
+  "errors": {
+    "no_trunc": 1.1926359911921667,
+    "truncate": 1.2871483430505035,
+    "shrink": 0.9654512119423492
+  },
+  "perturb_angle_deg": {
+    "no_trunc": 86.83431385402724,
+    "truncate": 8.537736462515939e-07,
+    "shrink": 0.0
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "setting": {
+    "n_samples": 100,
+    "n_features": 20,
+    "n_informative": 5,
+    "rho": 0.3,
+    "noise_std": 1.0,
+    "seed": 0,
+    "solver": "qr"
+  },
+  "single_seed0": {
+    "support": {
+      "tp": 5,
+      "fp": 15,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1.0,
+      "jaccard": 0.25
+    },
+    "coef_mse": 0.0136183268254981,
+    "pred_mse": 0.8129396663354987
+  },
+  "monte_carlo": {
+    "B": 200,
+    "seeds": "0..199",
+    "mean_abs_bias": 0.008514473853851323,
+    "max_abs_bias": 0.021019026472243806,
+    "mean_coef_sd": 0.12405112775555589,
+    "mc_se_scale": 0.008771739364979231
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "setting": {
+    "dataset": "sklearn diabetes",
+    "n_train": 350,
+    "n_test": 92,
+    "seed": 42,
+    "solver": "qr"
+  },
+  "train_r2": 0.4974305750403242,
+  "test_r2": 0.5827806010167794,
+  "test_mse": 2620.165035575428,
+  "sklearn_max_coef_diff": 1.1368683772161603e-12,
+  "sklearn_intercept_diff": 0.0
+}

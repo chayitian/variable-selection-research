@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific: downloaded reference papers are a local reading cache only.
+# Keep metadata and links in references.bib instead; the scans are not ours to redistribute.
+papers/
+
+# Agent working documents (session logs and project memory, local only)
+.workbuddy/
