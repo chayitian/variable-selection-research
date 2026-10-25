@@ -2,7 +2,7 @@
 
 变量选择方法发展脉络综述
 
-本仓库系统梳理变量选择（variable selection）方法自 1805 年以来的发展脉络：按七个历史阶段组织，覆盖各方法的起源文献、诞生背景与动因、核心理论支撑及所解决的关键问题。全部起源文献均经逐条核验（题录信息以 Crossref 等权威记录为准），其中可公开获取的 37 篇 PDF 存于 [`papers/`](papers/) 目录，文件名与题录一一对应；其余 26 篇为付费墙文献、专著或被反爬拦截的开放获取文献，仅收录题录与获取链接（见 [§5](#5-仓库结构说明)）。此外，仓库以"三层架构"组织各方法的可复现学习资料（`lib/` 共享库 + `methods/` 方法模块 + `benchmarks/` 跨方法横评），入口见 [§0](#0-方法学习模块导航)。
+本仓库系统梳理变量选择（variable selection）方法自 1805 年以来的发展脉络：按七个历史阶段组织，覆盖各方法的起源文献、诞生背景与动因、核心理论支撑及所解决的关键问题。全部起源文献均经逐条核验（题录信息以 Crossref 等权威记录为准），其中可公开获取的 47 篇 PDF 存于 [`papers/`](papers/) 目录，文件名与题录一一对应；其余 17 篇为付费墙文献、专著或被反爬拦截的开放获取文献，仅收录题录与获取链接（见 [§5](#5-仓库结构说明)）。此外，仓库以"三层架构"组织各方法的可复现学习资料（`lib/` 共享库 + `methods/` 方法模块 + `benchmarks/` 跨方法横评），入口见 [§0](#0-方法学习模块导航)。
 
 ## 目录
 
@@ -30,10 +30,13 @@
 - **`methods/`** — 方法学习模块：每个文件夹含逐段讲解的从零实现、七段式主文档、可运行实验及图表结果；
 - **`benchmarks/`** — （规划中）跨方法横评，待方法模块攒够 3 个以上后建立。
 
-| 编号 | 方法 | 状态 | 入口 |
-| :--- | :--- | :--- | :--- |
-| 01 | 最小二乘（OLS） | 已完成 | [methods/01-least-squares/](methods/01-least-squares/) |
-| 02 | Fisher 判别分析（FDA） | 已完成 | [methods/02-fisher-discriminant/](methods/02-fisher-discriminant/) |
+| 编号 | 方法 | 前置 | 状态 | 入口 |
+| :--- | :--- | :--- | :--- | :--- |
+| 01 | 最小二乘（OLS） | — | 已完成 | [methods/01-least-squares/](methods/01-least-squares/) |
+| 02 | Fisher 判别分析（FDA） | 01 | 已完成 | [methods/02-fisher-discriminant/](methods/02-fisher-discriminant/) |
+| 03 | 逐步选择法（Stepwise Selection） | 01 | 已完成 | [methods/03-stepwise-selection/](methods/03-stepwise-selection/) |
+
+各方法文档均可独立阅读：符号、实验指标与参考文献都在文档内自足（文献使用模块内局部编号，每条后标注本表 §4 的总编号）；“前置”列标注建议先读的模块——不按顺序阅读的读者从任意一个模块进入都不会遇到未定义符号。
 
 新增方法请从 [methods/_template/](methods/_template/) 复制模板；写作风格、代码与实验规范见模板文件及各方法文档。
 
@@ -81,10 +84,10 @@ timeline
 
 | 方法 | 起源文献 | 核心理论支撑 | 所解决的关键问题 |
 | :--- | :--- | :--- | :--- |
-| 逐步选择法 | Efroymson (1960)；Draper & Smith (1966)；Beale, Kendall & Mann (1967), *Biometrika* 54(3–4): 357–366 [仅题录] | 贪心算法 + F/t 检验纳入剔除准则 | 高维候选变量下的半自动筛选 |
-| 全子集选择与分支定界 | Furnival & Wilson (1974), *Technometrics* 16(4): 499–511 [仅题录]；Hocking (1976), *Biometrics* 32(1): 1–49 [仅题录] | 组合优化的全局搜索 | 克服逐步法的局部最优（受组合爆炸限制） |
-| Mallows Cp | Mallows (1973), *Technometrics* 15(4): 661–675 [仅题录] | 均方预测误差的无偏估计 | 模型拟合优度与复杂度的权衡准则 |
-| 方法论批判 | Mantel (1970), *Technometrics* 12(3): 621–625 [仅题录]；Miller (1984), *JRSS A* 147(3): 389–425 [仅题录] | 模拟研究与系统综述 | 揭示逐步法的过拟合与不稳定性，确立变量选择的问题意识 |
+| 逐步选择法 | Efroymson (1960)；Draper & Smith (1966) | 贪心算法 + F/t 检验纳入剔除准则 | 高维候选变量下的半自动筛选 |
+| 全子集选择与分支定界 | Beale, Kendall & Mann (1967), *Biometrika* 54(3–4): 357–366（变量剔除的早期研究；定位介于剔除与子集选择之间，详见 03 模块 §1.2）；Furnival & Wilson (1974), *Technometrics* 16(4): 499–511；Hocking (1976), *Biometrics* 32(1): 1–49（综述） | 组合优化的全局搜索 | 克服逐步法的局部最优（受组合爆炸限制） |
+| Mallows Cp | Mallows (1973), *Technometrics* 15(4): 661–675 [PDF](papers/Mallows_1973_SomeCommentsCp.pdf) | 均方预测误差的无偏估计 | 模型拟合优度与复杂度的权衡准则 |
+| 方法论批判 | Mantel (1970), *Technometrics* 12(3): 621–625；Miller (1984), *JRSS A* 147(3): 389–425 | 方法比较与系统性质疑 | 共线场景下论证后向消除优于前向、提醒最佳子集结果对指定规模的敏感性（Mantel）；揭示过拟合与选择不稳定性（Miller） |
 
 ### 2.3 信息准则与收缩估计（1970s–1990s）
 
@@ -106,16 +109,16 @@ timeline
 | 方法 | 起源文献 | 核心理论支撑 | 所解决的关键问题 |
 | :--- | :--- | :--- | :--- |
 | Lasso | Tibshirani (1996), *JRSS B* 58(1): 267–288 [PDF](papers/Tibshirani_1996_Lasso.pdf) | L1 惩罚、凸优化、软阈值算子 | 连续优化下同时实现系数收缩与精确置零 |
-| LARS 与路径算法 | Efron, Hastie, Johnstone & Tibshirani (2004), *Annals of Statistics* 32(2): 407–499 [PDF](papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)；Fu (1998) [仅题录]；Osborne, Presnell & Turlach (2000), *JCGS* 9(2): 319–337 [PDF](papers/Osborne_Presnell_Turlach_2000_LassoDual.pdf)；Friedman et al. (2007) [PDF](papers/Friedman_Hastie_Hofling_Tibshirani_2007_PathwiseCoordinateOptimization.pdf) | 分段线性解路径、坐标下降 | 整条正则路径的高效计算 |
+| LARS 与路径算法 | Efron, Hastie, Johnstone & Tibshirani (2004), *Annals of Statistics* 32(2): 407–499 [PDF](papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)；Fu (1998) [PDF](papers/Fu_1998_BridgeVersusLasso.pdf)；Osborne, Presnell & Turlach (2000), *JCGS* 9(2): 319–337 [PDF](papers/Osborne_Presnell_Turlach_2000_LassoDual.pdf)；Friedman et al. (2007) [PDF](papers/Friedman_Hastie_Hofling_Tibshirani_2007_PathwiseCoordinateOptimization.pdf) | 分段线性解路径、坐标下降 | 整条正则路径的高效计算 |
 | Elastic Net | Zou & Hastie (2005), *JRSS B* 67(2): 301–320 [PDF](papers/Zou_Hastie_2005_ElasticNet.pdf) | L1+L2 混合惩罚、分组效应 | p>n 且强相关时 Lasso 至多选 n 个、选择不稳定 |
 | Fused Lasso | Tibshirani, Saunders, Rosset, Zhu & Knight (2005), *JRSS B* 67(1): 91–108 [PDF](papers/Tibshirani_Saunders_Rosset_Zhu_Knight_2005_FusedLasso.pdf) | L1 + 一阶差分惩罚 | 有序/时空结构信号的稀疏与平滑 |
-| Group Lasso | Yuan & Lin (2006), *JRSS B* 68(1): 49–67 [仅题录] | 组级 L1 + 组内 L2 | 预定义分组（如基因通路）的成组选择 |
+| Group Lasso | Yuan & Lin (2006), *JRSS B* 68(1): 49–67 [PDF](papers/Yuan_Lin_2006_GroupedVariables.pdf) | 组级 L1 + 组内 L2 | 预定义分组（如基因通路）的成组选择 |
 | Relaxed Lasso | Meinshausen (2007), *CSDA* 52(1): 374–393 [PDF](papers/Meinshausen_2007_RelaxedLasso.pdf) | 两步去偏估计 | 缓解 L1 对重要系数的过度收缩 |
 
 这一时代的方法共享统一的惩罚似然形式，差别仅在惩罚项 $p_\lambda(\cdot)$ 与结构项的设计：
 
 $$
-\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^{p}} \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda \sum_{j=1}^{p} p_\lambda(|\beta_j|)
+\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^{p}} \frac{1}{2n}\|y - X\beta\|_2^2 + \sum_{j=1}^{p} p_\lambda(|\beta_j|)
 $$
 
 > **范式解读**：Lasso 的贡献不在具体算法，而在形式化——把"选择变量"这一离散决策转化为连续凸优化问题。此后二十余年的工作（结构化稀疏、非凸惩罚、高维理论、选择后推断）几乎都是在这一框架上替换惩罚项或叠加结构约束。
@@ -129,9 +132,9 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 | SCAD | Fan & Li (2001), *JASA* 96(456): 1348–1360 [PDF](papers/Fan_Li_2001_NonconcavePenalizedLikelihood.pdf) | 非凸凹惩罚 | 克服 L1 过度收缩，获得 oracle 性质 |
 | Adaptive Lasso | Zou (2006), *JASA* 101(476): 1418–1429 [PDF](papers/Zou_2006_AdaptiveLasso.pdf) | 加权 L1 两阶段估计 | 以自适应权重实现 oracle 性质 |
 | MCP | Zhang (2010), *Annals of Statistics* 38(2): 894–942 [PDF](papers/Zhang_2010_MinimaxConcavePenalty.pdf) | 极小极大凹惩罚 | 近无偏变量选择 |
-| Dantzig Selector | Candès & Tao (2007), *Annals of Statistics* 35(6): 2313–2351 [PDF](papers/Candes_Tao_2007_DantzigSelector.pdf)；源于压缩感知：Donoho (2006) [PDF](papers/Donoho_2006_CompressedSensing.pdf)；Candès, Romberg & Tao (2006) [PDF](papers/Candes_Romberg_Tao_2006_RobustUncertaintyPrinciples.pdf) | ℓ1 约束最小化与 RIP/零空间条件 | p≫n 下的稀疏信号恢复 |
+| Dantzig Selector | Candès & Tao (2007), *Annals of Statistics* 35(6): 2313–2351 [PDF](papers/Candes_Tao_2007_DantzigSelector.pdf)；源于压缩感知：Donoho (2006) [PDF](papers/Donoho_2006_CompressedSensing.pdf)；Candès, Romberg & Tao (2006) [PDF](papers/Candes_Romberg_Tao_2006_RobustUncertaintyPrinciples.pdf) | ℓ1 范数最小化 + 残差相关性 ℓ∞ 约束，与 RIP/零空间条件 | p≫n 下的稀疏信号恢复 |
 | SIS（确定性独立筛选） | Fan & Lv (2008), *JRSS B* 70(5): 849–911 [PDF](papers/Fan_Lv_2008_SureIndependenceScreening.pdf) | 边际相关筛选 + 迭代 ISIS | 超高维（维度随 n 指数增长）的第一层降维 |
-| 高维 Lasso 理论 | Greenshtein & Ritov (2004), *Bernoulli* 10(6): 971–988 [仅题录]；Wainwright (2009), *IEEE TIT* 55(5): 2183–2202 [PDF](papers/Wainwright_2009_SharpThresholds.pdf)；Bickel, Ritov & Tsybakov (2009), *Annals of Statistics* 37(4): 1705–1732 [PDF](papers/Bickel_Ritov_Tsybakov_2009_LassoDantzig.pdf)；van de Geer & Bühlmann (2009), *EJS* 3: 1360–1392 [PDF](papers/vandeGeer_Buhlmann_2009_OracleResultsLasso.pdf) | 限制特征值/相容性条件、预测误差界 | 高维场景下 Lasso 的理论保证 |
+| 高维 Lasso 理论 | Greenshtein & Ritov (2004), *Bernoulli* 10(6): 971–988 [PDF](papers/Greenshtein_Ritov_2004_Persistence.pdf)；Wainwright (2009), *IEEE TIT* 55(5): 2183–2202 [PDF](papers/Wainwright_2009_SharpThresholds.pdf)；Bickel, Ritov & Tsybakov (2009), *Annals of Statistics* 37(4): 1705–1732 [PDF](papers/Bickel_Ritov_Tsybakov_2009_LassoDantzig.pdf)；van de Geer & Bühlmann (2009), *EJS* 3: 1360–1392 [PDF](papers/vandeGeer_Buhlmann_2009_OracleResultsLasso.pdf) | 限制特征值/相容性条件、预测误差界 | 高维场景下 Lasso 的理论保证 |
 
 ### 2.6 选择后推断与可复现（2010s）
 
@@ -140,7 +143,7 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 | 方法 | 起源文献 | 核心理论支撑 | 所解决的关键问题 |
 | :--- | :--- | :--- | :--- |
 | 稳定性选择 | Meinshausen & Bühlmann (2010), *JRSS B* 72(4): 417–473 [PDF](papers/Meinshausen_Buhlmann_2010_StabilitySelection.pdf) | 子抽样 + 入选频率阈值 | 选择结果对数据扰动的不稳定性 |
-| 选择后推断 | Berk et al. (2013), *Annals of Statistics* 41(2): 802–837 [PDF](papers/Berk_etal_2013_ValidPostSelectionInference.pdf)；Lockhart et al. (2014), *Annals of Statistics* 42(2): 413–468 [PDF](papers/Lockhart_etal_2014_SignificanceTestLasso.pdf)；Lee et al. (2016), *Annals of Statistics* 44(3): 907–927 [PDF](papers/Lee_Sun_Sun_Taylor_2016_ExactPostSelectionInference.pdf)；Taylor & Tibshirani (2018), *Canadian Journal of Statistics* 46(1): 41–61 [PDF](papers/Taylor_Tibshirani_2018_PostSelectionInference.pdf) | 条件于选择事件的有效推断 | "先选择后检验"的选择性偏差（p-hacking） |
+| 选择后推断 | Berk et al. (2013), *Annals of Statistics* 41(2): 802–837 [PDF](papers/Berk_etal_2013_ValidPostSelectionInference.pdf)；Lockhart et al. (2014), *Annals of Statistics* 42(2): 413–468 [PDF](papers/Lockhart_etal_2014_SignificanceTestLasso.pdf)；Lee et al. (2016), *Annals of Statistics* 44(3): 907–927 [PDF](papers/Lee_Sun_Sun_Taylor_2016_ExactPostSelectionInference.pdf)；Taylor & Tibshirani (2018), *Canadian Journal of Statistics* 46(1): 41–61 [PDF](papers/Taylor_Tibshirani_2018_PostSelectionInference.pdf) | 同时置信区间（Berk）/ 路径显著性检验（Lockhart）/ 条件于选择事件的推断（Lee、Taylor） | "先选择后检验"的选择性偏差（p-hacking） |
 | Knockoff 滤波器 | Barber & Candès (2015), *Annals of Statistics* 43(5): 2055–2085 [PDF](papers/Barber_Candes_2015_Knockoffs.pdf) | 构造"敲除"变量对 | 变量选择与 FDR 严格控制同时实现 |
 
 ### 2.7 当代前沿（2010s–至今）
@@ -150,7 +153,7 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 | 最佳子集选择的现代复兴 | Bertsimas, King & Mazumder (2016), *Annals of Statistics* 44(2): 813–852 [PDF](papers/Bertsimas_King_Mazumder_2016_BestSubsetSelection.pdf)；Hazimeh & Mazumder (2020), *Operations Research* 68(5): 1517–1537 [PDF](papers/Hazimeh_Mazumder_2020_FastBestSubsetSelection.pdf) | 混合整数优化与局部组合算法 | L1 凸松弛与真实 k-稀疏解之间的差距 |
 | 多研究/多任务整合 | Obozinski, Taskar & Jordan (2010), *Statistics and Computing* 20(2): 231–252 [PDF](papers/Obozinski_Taskar_Jordan_2010_JointCovariateSelection.pdf) | 共享稀疏结构先验 | 跨数据集/跨任务的选择一致性 |
 | 因果变量选择 | Peters, Bühlmann & Meinshausen (2016), *JRSS B* 78(5): 947–1012 [PDF](papers/Peters_Buhlmann_Meinshausen_2016_InvariantCausalPrediction.pdf) | 不变性原理 | 分布变化下选择因果相关变量（相关 ≠ 因果） |
-| 深度学习时代的稀疏性 | Han, Pool, Tran & Dally (2015), *NIPS 28*: 1135–1143 [PDF](papers/Han_Pool_Tran_Dally_2015_EfficientNeuralNetworks.pdf)；Frankle & Carbin (2019), *ICLR* [PDF](papers/Frankle_Carbin_2019_LotteryTicketHypothesis.pdf) | 网络剪枝与彩票假说 | 高维非线性下的可解释性与模型压缩 |
+| 深度学习时代的稀疏性 | Han, Pool, Tran & Dally (2015), *NIPS 28*: 1135–1143 [PDF](papers/Han_Pool_Tran_Dally_2015_EfficientNeuralNetworks.pdf)；Frankle & Carbin (2019), *ICLR* [PDF](papers/Frankle_Carbin_2019_LotteryTicketHypothesis.pdf) | 网络剪枝与彩票假说 | 高维非线性下的模型压缩与稀疏训练 |
 
 ## 3. 方法体系横向对比
 
@@ -159,17 +162,17 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 | 二 | 逐步回归/子集选择 | Efroymson (1960)；Furnival & Wilson (1974) | 组合搜索 | 有（离散） | 弱 | — | 无 |
 | 三 | AIC/BIC/GCV | Akaike (1974)；Schwarz (1978)；Golub et al. (1979) | 复杂度惩罚 | 有（模型选择） | 弱 | — | 无 |
 | 三 | Ridge | Hoerl & Kennard (1970) | L2 | 无 | 弱 | 有偏 | 无 |
-| 三 | Garrote/Bridge | Breiman (1995)；Frank & Friedman (1993) | 收缩+阈值 / Lq | 有 | 弱 | 部分 | 无 |
+| 三 | Garrote/Bridge | Breiman (1995)；Frank & Friedman (1993) | 收缩+阈值 / Lq | 有（Garrote 阈值化；Bridge q≤1） | 弱 | 部分 | 无 |
 | 四 | Lasso | Tibshirani (1996) | L1 | 有 | 中 | 有偏 | 无 |
 | 四 | Elastic Net/Group/Fused | Zou & Hastie (2005)；Yuan & Lin (2006)；Tibshirani et al. (2005) | L1+L2 / 组结构 | 有（结构化） | 强 | 有偏 | 无 |
 | 五 | SCAD/MCP/Adaptive | Fan & Li (2001)；Zhang (2010)；Zou (2006) | 非凸 / 加权 L1 | 有 | 强 | 近无偏（oracle） | 无 |
 | 五 | SIS | Fan & Lv (2008) | 边际筛选 | 有 | 极强 | — | 无 |
-| 六 | 稳定性选择/Knockoff/选择后推断 | Meinshausen & Bühlmann (2010)；Barber & Candès (2015)；Lee et al. (2016) | 重抽样 / 推断校正 | — | 强 | — | 有（FDR / 有效区间） |
+| 六 | 稳定性选择/Knockoff/选择后推断 | Meinshausen & Bühlmann (2010)；Barber & Candès (2015)；Lee et al. (2016) | 重抽样 / 推断校正 | — | 强 | — | 有（PFER / FDR / 有效区间，依方法而异） |
 | 七 | 最佳子集/因果/深度学习 | Bertsimas et al. (2016)；Peters et al. (2016)；Han et al. (2015) | MIO / 不变性 / 剪枝 | 有 | 强 | — | 部分 |
 
 ## 4. 参考文献题录
 
-按章节顺序编号；`[PDF]` 表示已下载至 `papers/`，`[仅题录]` 表示仅收录题录（原因见 §5）。末尾附 2026-10-23/24 增补的支撑文献（编号 53–63）。
+按章节顺序编号；`[PDF]` 表示已下载至 `papers/`，`[仅题录]` 表示仅收录题录（原因见 §5）。末尾附 2026-10-23/24/25 增补的支撑文献（编号 53–64）。各方法模块文档使用自己的局部文献编号（见各模块 §7），并在每条后标注本表的总编号以便对照。
 
 **2.1 思想萌芽期**
 
@@ -183,11 +186,11 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 5. Efroymson, M. A. (1960). Multiple regression analysis. In A. Ralston & H. S. Wilf (Eds.), *Mathematical Methods for Digital Computers* (Vol. 1, pp. 191–203). New York: Wiley. [仅题录]
 6. Draper, N. R., & Smith, H. (1966). *Applied Regression Analysis* (1st ed.). New York: Wiley. [仅题录]
 7. Beale, E. M. L., Kendall, M. G., & Mann, D. W. (1967). The discarding of variables in multivariate analysis. *Biometrika*, 54(3–4): 357–366. DOI: [10.1093/biomet/54.3-4.357](https://doi.org/10.1093/biomet/54.3-4.357) [仅题录]
-8. Furnival, G. M., & Wilson, R. W., Jr. (1974). Regressions by leaps and bounds. *Technometrics*, 16(4): 499–511. DOI: [10.1080/00401706.1974.10489231](https://doi.org/10.1080/00401706.1974.10489231) [仅题录]
+8. Furnival, G. M., & Wilson, R. W., Jr. (1974). Regressions by leaps and bounds. *Technometrics*, 16(4): 499–511. DOI: [10.1080/00401706.1974.10489231](https://doi.org/10.1080/00401706.1974.10489231) [PDF](papers/Furnival_Wilson_1974_LeapsBounds.pdf)
 9. Hocking, R. R. (1976). The analysis and selection of variables in linear regression. *Biometrics*, 32(1): 1–49. DOI: [10.2307/2529336](https://doi.org/10.2307/2529336) [仅题录]
-10. Mallows, C. L. (1973). Some comments on $C_p$. *Technometrics*, 15(4): 661–675. DOI: [10.1080/00401706.1973.10489103](https://doi.org/10.1080/00401706.1973.10489103)（JSTOR: 10.2307/1267380）[仅题录]
-11. Mantel, N. (1970). Why stepdown procedures in variable selection. *Technometrics*, 12(3): 621–625. DOI: [10.1080/00401706.1970.10488701](https://doi.org/10.1080/00401706.1970.10488701) [仅题录]
-12. Miller, A. J. (1984). Selection of subsets of regression variables (with discussion). *Journal of the Royal Statistical Society, Series A*, 147(3): 389–425. DOI: [10.2307/2981576](https://doi.org/10.2307/2981576) [仅题录]；专著版：Miller, A. J. (1990). *Subset Selection in Regression*. London: Chapman & Hall. [仅题录]
+10. Mallows, C. L. (1973). Some comments on $C_p$. *Technometrics*, 15(4): 661–675. DOI: [10.1080/00401706.1973.10489103](https://doi.org/10.1080/00401706.1973.10489103)（JSTOR: 10.2307/1267380）[PDF](papers/Mallows_1973_SomeCommentsCp.pdf)
+11. Mantel, N. (1970). Why stepdown procedures in variable selection. *Technometrics*, 12(3): 621–625. DOI: [10.1080/00401706.1970.10488701](https://doi.org/10.1080/00401706.1970.10488701) [PDF](papers/Mantel_1970_StepdownProcedures.pdf)
+12. Miller, A. J. (1984). Selection of subsets of regression variables (with discussion). *Journal of the Royal Statistical Society, Series A*, 147(3): 389–425. DOI: [10.2307/2981576](https://doi.org/10.2307/2981576) [PDF](papers/Miller_1984_SubsetSelection.pdf)；专著版：Miller, A. J. (1990). *Subset Selection in Regression*. London: Chapman & Hall. [仅题录]
 
 **2.3 信息准则与收缩估计**
 
@@ -203,13 +206,13 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 **2.4 L1 稀疏革命时代**
 
 21. Tibshirani, R. (1996). Regression shrinkage and selection via the lasso. *Journal of the Royal Statistical Society, Series B*, 58(1): 267–288. DOI: [10.1111/j.2517-6161.1996.tb02080.x](https://doi.org/10.1111/j.2517-6161.1996.tb02080.x) [PDF](papers/Tibshirani_1996_Lasso.pdf)
-22. Fu, W. J. (1998). Penalized regressions: the bridge versus the lasso. *Journal of Computational and Graphical Statistics*, 7(3): 397–416. DOI: [10.1080/10618600.1998.10474784](https://doi.org/10.1080/10618600.1998.10474784) [仅题录]
+22. Fu, W. J. (1998). Penalized regressions: the bridge versus the lasso. *Journal of Computational and Graphical Statistics*, 7(3): 397–416. DOI: [10.1080/10618600.1998.10474784](https://doi.org/10.1080/10618600.1998.10474784) [PDF](papers/Fu_1998_BridgeVersusLasso.pdf)
 23. Osborne, M. R., Presnell, B., & Turlach, B. A. (2000). On the lasso and its dual. *Journal of Computational and Graphical Statistics*, 9(2): 319–337. DOI: [10.1080/10618600.2000.10474883](https://doi.org/10.1080/10618600.2000.10474883) [PDF](papers/Osborne_Presnell_Turlach_2000_LassoDual.pdf)
-24. Efron, B., Hastie, T., Johnstone, I., & Tibshirani, R. (2004). Least angle regression. *The Annals of Statistics*, 32(2): 407–499. DOI: [10.1214/009053604000000067](https://doi.org/10.1214/009053604000000067) [PDF](papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)
+24. Efron, B., Hastie, T., Johnstone, I., & Tibshirani, R. (2004). Least angle regression. *The Annals of Statistics*, 32(2): 407–499. DOI: [10.1214/009053604000000067](https://doi.org/10.1214/009053604000000067) [PDF](papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)（本地为 arXiv 主文版 pp. 407–451，含 diabetes 数据附录；含讨论的出版全版为 pp. 407–499）
 25. Friedman, J., Hastie, T., Höfling, H., & Tibshirani, R. (2007). Pathwise coordinate optimization. *The Annals of Applied Statistics*, 1(2): 302–332. DOI: [10.1214/07-AOAS131](https://doi.org/10.1214/07-AOAS131)（预印本 arXiv:0708.1485）[PDF](papers/Friedman_Hastie_Hofling_Tibshirani_2007_PathwiseCoordinateOptimization.pdf)
 26. Zou, H., & Hastie, T. (2005). Regularization and variable selection via the elastic net. *Journal of the Royal Statistical Society, Series B*, 67(2): 301–320. DOI: [10.1111/j.1467-9868.2005.00503.x](https://doi.org/10.1111/j.1467-9868.2005.00503.x) [PDF](papers/Zou_Hastie_2005_ElasticNet.pdf)
 27. Tibshirani, R., Saunders, M., Rosset, S., Zhu, J., & Knight, K. (2005). Sparsity and smoothness via the fused lasso. *Journal of the Royal Statistical Society, Series B*, 67(1): 91–108. DOI: [10.1111/j.1467-9868.2005.00490.x](https://doi.org/10.1111/j.1467-9868.2005.00490.x) [PDF](papers/Tibshirani_Saunders_Rosset_Zhu_Knight_2005_FusedLasso.pdf)
-28. Yuan, M., & Lin, Y. (2006). Model selection and estimation in regression with grouped variables. *Journal of the Royal Statistical Society, Series B*, 68(1): 49–67. DOI: [10.1111/j.1467-9868.2005.00532.x](https://doi.org/10.1111/j.1467-9868.2005.00532.x) [仅题录]
+28. Yuan, M., & Lin, Y. (2006). Model selection and estimation in regression with grouped variables. *Journal of the Royal Statistical Society, Series B*, 68(1): 49–67. DOI: [10.1111/j.1467-9868.2005.00532.x](https://doi.org/10.1111/j.1467-9868.2005.00532.x) [PDF](papers/Yuan_Lin_2006_GroupedVariables.pdf)
 29. Meinshausen, N. (2007). Relaxed lasso. *Computational Statistics & Data Analysis*, 52(1): 374–393. DOI: [10.1016/j.csda.2006.12.019](https://doi.org/10.1016/j.csda.2006.12.019) [PDF](papers/Meinshausen_2007_RelaxedLasso.pdf)
 
 **2.5 非凸惩罚与高维统计**
@@ -221,7 +224,7 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 34. Candès, E. J., Romberg, J. K., & Tao, T. (2006). Robust uncertainty principles: exact signal reconstruction from highly incomplete frequency information. *IEEE Transactions on Information Theory*, 52(2): 489–509. DOI: [10.1109/TIT.2005.862083](https://doi.org/10.1109/TIT.2005.862083) [PDF](papers/Candes_Romberg_Tao_2006_RobustUncertaintyPrinciples.pdf)
 35. Candès, E., & Tao, T. (2007). The Dantzig selector: statistical estimation when p is much larger than n. *The Annals of Statistics*, 35(6): 2313–2351. DOI: [10.1214/009053606000001523](https://doi.org/10.1214/009053606000001523) [PDF](papers/Candes_Tao_2007_DantzigSelector.pdf)
 36. Fan, J., & Lv, J. (2008). Sure independence screening for ultrahigh dimensional feature space. *Journal of the Royal Statistical Society, Series B*, 70(5): 849–911. DOI: [10.1111/j.1467-9868.2008.00674.x](https://doi.org/10.1111/j.1467-9868.2008.00674.x) [PDF](papers/Fan_Lv_2008_SureIndependenceScreening.pdf)
-37. Greenshtein, E., & Ritov, Y. (2004). Persistence in high-dimensional linear predictor selection and the virtue of overparametrization. *Bernoulli*, 10(6): 971–988. DOI: [10.3150/bj/1106314846](https://doi.org/10.3150/bj/1106314846) [仅题录]
+37. Greenshtein, E., & Ritov, Y. (2004). Persistence in high-dimensional linear predictor selection and the virtue of overparametrization. *Bernoulli*, 10(6): 971–988. DOI: [10.3150/bj/1106314846](https://doi.org/10.3150/bj/1106314846) [PDF](papers/Greenshtein_Ritov_2004_Persistence.pdf)
 38. Wainwright, M. J. (2009). Sharp thresholds for high-dimensional and noisy sparsity recovery using $\ell_1$-constrained quadratic programming (Lasso). *IEEE Transactions on Information Theory*, 55(5): 2183–2202. DOI: [10.1109/TIT.2009.2016018](https://doi.org/10.1109/TIT.2009.2016018) [PDF](papers/Wainwright_2009_SharpThresholds.pdf)
 39. Bickel, P. J., Ritov, Y., & Tsybakov, A. B. (2009). Simultaneous analysis of lasso and Dantzig selector. *The Annals of Statistics*, 37(4): 1705–1732. DOI: [10.1214/08-AOS620](https://doi.org/10.1214/08-AOS620) [PDF](papers/Bickel_Ritov_Tsybakov_2009_LassoDantzig.pdf)
 40. van de Geer, S. A., & Bühlmann, P. (2009). On the conditions used to prove oracle results for the lasso. *Electronic Journal of Statistics*, 3: 1360–1392. DOI: [10.1214/09-EJS506](https://doi.org/10.1214/09-EJS506) [PDF](papers/vandeGeer_Buhlmann_2009_OracleResultsLasso.pdf)
@@ -244,19 +247,20 @@ L1 对重要系数的有偏收缩与高维场景的理论空白，由非凸惩�
 51. Han, S., Pool, J., Tran, J., & Dally, W. J. (2015). Learning both weights and connections for efficient neural networks. *Advances in Neural Information Processing Systems 28 (NIPS 2015)*: 1135–1143. [PDF](papers/Han_Pool_Tran_Dally_2015_EfficientNeuralNetworks.pdf)
 52. Frankle, J., & Carbin, M. (2019). The lottery ticket hypothesis: finding sparse, trainable neural networks. *International Conference on Learning Representations (ICLR) 2019*. [PDF](papers/Frankle_Carbin_2019_LotteryTicketHypothesis.pdf)
 
-**增补文献（2026-10-23/24，支撑 §2.1 与方法模块 01-least-squares、02-fisher-discriminant）**
+**增补文献（2026-10-23/24/25，支撑 §2.1 与方法模块 01-least-squares、02-fisher-discriminant、03-stepwise-selection）**
 
 53. Stigler, S. M. (1981). Gauss and the invention of least squares. *The Annals of Statistics*, 9(3): 465–474. DOI: [10.1214/aos/1176345451](https://doi.org/10.1214/aos/1176345451) [PDF](papers/Stigler_1981_GaussInventionLeastSquares.pdf)
-54. Plackett, R. L. (1972). Studies in the history of probability and statistics. XXIX: The discovery of the method of least squares. *Biometrika*, 59(2): 239–251. DOI: [10.1093/biomet/59.2.239](https://doi.org/10.1093/biomet/59.2.239) [仅题录]
+54. Plackett, R. L. (1972). Studies in the history of probability and statistics. XXIX: The discovery of the method of least squares. *Biometrika*, 59(2): 239–251. DOI: [10.1093/biomet/59.2.239](https://doi.org/10.1093/biomet/59.2.239) [PDF](papers/Plackett_1972_DiscoveryLeastSquares.pdf)
 55. Seber, G. A. F., & Lee, A. J. (2003). *Linear Regression Analysis* (2nd ed.). Hoboken: Wiley. DOI: [10.1002/9780471722199](https://doi.org/10.1002/9780471722199) [仅题录]
 56. Rao, C. R. (1973). *Linear Statistical Inference and Its Applications*. New York: Wiley. DOI: [10.1002/9780470316436](https://doi.org/10.1002/9780470316436) [仅题录]
 57. Golub, G. H., & Van Loan, C. F. (2013). *Matrix Computations* (4th ed.). Baltimore: Johns Hopkins University Press. DOI: [10.56021/9781421407944](https://doi.org/10.56021/9781421407944) [仅题录]
 58. Frisch, R., & Waugh, F. V. (1933). Partial time regressions as compared with individual trends. *Econometrica*, 1(4): 387–401. DOI: [10.2307/1907330](https://doi.org/10.2307/1907330) [仅题录]
-59. Lovell, M. C. (1963). Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association*, 58(304): 993–1010. DOI: [10.1080/01621459.1963.10480682](https://doi.org/10.1080/01621459.1963.10480682) [仅题录]
+59. Lovell, M. C. (1963). Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association*, 58(304): 993–1010. DOI: [10.1080/01621459.1963.10480682](https://doi.org/10.1080/01621459.1963.10480682) [PDF](papers/Lovell_1963_SeasonalAdjustment.pdf)
 60. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). New York: Springer. DOI: [10.1007/978-0-387-84858-7](https://doi.org/10.1007/978-0-387-84858-7) [仅题录]
 61. Anderson, E. (1935). The irises of the Gaspé Peninsula. *Bulletin of the American Iris Society*, 59: 2–5.［iris 数据原始来源；历史公报，无 DOI 与电子版］[仅题录]
 62. Rao, C. R. (1948). The utilization of multiple measurements in problems of biological classification. *Journal of the Royal Statistical Society, Series B*, 10(2): 159–193. DOI: [10.1111/j.2517-6161.1948.tb00008.x](https://doi.org/10.1111/j.2517-6161.1948.tb00008.x) [仅题录]
-63. Friedman, J. H. (1989). Regularized discriminant analysis. *Journal of the American Statistical Association*, 84(405): 165–175. DOI: [10.1080/01621459.1989.10478752](https://doi.org/10.1080/01621459.1989.10478752) [仅题录]
+63. Friedman, J. H. (1989). Regularized discriminant analysis. *Journal of the American Statistical Association*, 84(405): 165–175. DOI: [10.1080/01621459.1989.10478752](https://doi.org/10.1080/01621459.1989.10478752) [PDF](papers/Friedman_1989_RegularizedDiscriminantAnalysis.pdf)
+64. Derksen, S., & Keselman, H. J. (1992). Backward, forward and stepwise automated subset selection algorithms: Frequency of obtaining authentic and noise variables. *British Journal of Mathematical and Statistical Psychology*, 45(2): 265–282. DOI: [10.1111/j.2044-8317.1992.tb00992.x](https://doi.org/10.1111/j.2044-8317.1992.tb00992.x) [仅题录]
 
 ## 5. 仓库结构说明
 
@@ -267,18 +271,20 @@ variable-selection-research/
 ├── lib/                 # 共享工具库：数据加载 / 评估指标 / 绘图风格
 ├── methods/             # 方法学习模块：一个方法一个文件夹，编号对应 §2 时间线
 │   ├── _template/       #   新方法模板（复制后修改）
-│   └── 01-least-squares/    # 最小二乘（首个样板模块，已完成）
-├── papers/              # 已核验并下载的起源文献 PDF（37 篇，本地阅读缓存，不提交 git）
+│   ├── 01-least-squares/    # 最小二乘（首个样板模块，已完成）
+│   ├── 02-fisher-discriminant/    # Fisher 判别分析
+│   └── 03-stepwise-selection/    # 逐步选择法
+├── papers/              # 已核验并下载的起源文献 PDF（47 篇，本地阅读缓存，不提交 git）
 └── LICENSE
 ```
 
 **文献核验与获取状态**
 
-- **核验方式**：现代期刊文献经 Crossref 按 DOI 逐条核验（标题、作者、年份、期刊、卷期页）；历史专著（Legendre 1805、Gauss 1809 等）Crossref 无记录，经权威书目记录核验。全部 PDF 均通过文件头（`%PDF-`）与大小校验。
+- **核验方式**：现代期刊文献经 Crossref 按 DOI 逐条核验（标题、作者、年份、期刊、卷期页）；历史专著（Legendre 1805、Gauss 1809 等）Crossref 无记录，经权威书目记录核验。全部 PDF 均通过文件头（`%PDF-`）、大小与**可解析页数（> 0）**校验——仅查文件头与大小曾漏掉 3 个结构损坏的文件，故增加解析级校验。
 - **PDF 命名规范**：`FirstAuthor_Year_ShortTitle.pdf`，与 §4 题录一一对应。
 - **PDF 来源渠道**：作者主页/机构仓库、arXiv、Project Euclid 开放获取、NeurIPS proceedings、UC eScholarship、Rothamsted Research 机构仓库及大学课程页等合法渠道。
-- **26 篇仅题录的原因**：
-  - 出版社付费墙（无开放副本）：Beale et al. (1967)、Furnival & Wilson (1974)、Hocking (1976)、Mallows (1973)、Mantel (1970)、Stone (1974)、Hughes (1968)、Fu (1998)、Plackett (1972)、Frisch & Waugh (1933)、Lovell (1963)、Rao (1948)、Friedman (1989)；
-  - 开放获取但获取受阻（反爬拦截）：Yuan & Lin (2006)（OUP bronze OA）、Greenshtein & Ritov (2004)（Project Euclid 开放获取）、Hastie et al. (2009)（作者官网提供免费版，当前网络不可达）——均可通过 §4 的 DOI 链接手动获取；
-  - 专著（无合法免费 PDF）：Seber & Lee (2003)、Rao (1973)、Golub & Van Loan (2013)、Miller (1984/1990)、Draper & Smith (1966)；
-  - 公版专著/历史文献/历史公报：Legendre (1805)、Gauss (1809)、Efroymson (1960，书章)、James & Stein (1961)、Anderson (1935，历史公报，无电子版)。
+- **17 篇仅题录的原因**：
+  - 出版社付费墙（无开放副本）：Beale et al. (1967)、Hocking (1976)、Stone (1974)、James & Stein (1961)、Rao (1948)、Hughes (1968)（IEEE 付费墙，仅有不完整扫描）、Derksen & Keselman (1992)；
+  - 专著（无合法免费 PDF）：Efroymson (1960，书章)、Draper & Smith (1966)、Seber & Lee (2003)、Rao (1973)、Golub & Van Loan (2013)；
+  - 公版专著/历史文献/历史公报：Legendre (1805)、Gauss (1809)、Anderson (1935)；
+  - 开放获取但获取受阻：Hastie et al. (2009)（作者官网提供免费版，当前网络不可达）、Frisch & Waugh (1933)（未找到 OA 副本）。

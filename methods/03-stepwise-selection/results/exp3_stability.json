@@ -1,0 +1,78 @@
+{
+  "setting": {
+    "B": 50,
+    "n_samples": 100,
+    "n_features": 20,
+    "n_informative": 5,
+    "rho": 0.3,
+    "noise_std": 3.0,
+    "method": "stepwise(0.05/0.10)",
+    "seeds_resample": "0..49",
+    "seeds_masking": "100..149",
+    "rho_pair": 0.95
+  },
+  "resample_freq": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.08,
+    0.02,
+    0.08,
+    0.04,
+    0.02,
+    0.06,
+    0.02,
+    0.06,
+    0.04,
+    0.06,
+    0.02,
+    0.02,
+    0.08,
+    0.06,
+    0.02
+  ],
+  "true_support": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "freq_on_true_support": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "mean_n_selected": 5.68,
+  "pairwise_jaccard": {
+    "mean": 0.8157452071737785,
+    "std": 0.13228169131528358,
+    "min": 0.45454545454545453,
+    "max": 1.0
+  },
+  "jaccard_vs_true": {
+    "mean": 0.8964285714285716,
+    "std": 0.11428571428571427
+  },
+  "masking_pair_freq": {
+    "true_variable_0": 0.74,
+    "shadow_variable_1": 0.28
+  },
+  "control_noise_1.0": {
+    "resample_freq_on_true": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "masking_pair_freq": {
+      "true_variable_0": 1.0,
+      "shadow_variable_1": 0.06
+    }
+  }
+}

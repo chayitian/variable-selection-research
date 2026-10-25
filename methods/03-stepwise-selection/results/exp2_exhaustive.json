@@ -1,0 +1,36 @@
+{
+  "setting": {
+    "n_samples": 80,
+    "n_features": 12,
+    "n_informative": 4,
+    "rho": 0.3,
+    "seed": 2,
+    "n_subsets_enumerated": 4096
+  },
+  "variant_gaps": {
+    "forward": {
+      "k": 5,
+      "rss": 65.57078991513183,
+      "rss_best_k": 65.57078991513183,
+      "rel_gap": 0.0
+    },
+    "stepwise": {
+      "k": 5,
+      "rss": 65.57078991513183,
+      "rss_best_k": 65.57078991513183,
+      "rel_gap": 0.0
+    },
+    "backward": {
+      "k": 5,
+      "rss": 65.57078991513183,
+      "rss_best_k": 65.57078991513183,
+      "rel_gap": 0.0
+    }
+  },
+  "forward_k_star": 5,
+  "forward_final_gap": 0.0,
+  "invariants": {
+    "rss_monotone": true,
+    "coef_max_abs_err": 0.0
+  }
+}

@@ -2,6 +2,25 @@
 
 最小二乘法（OLS）是线性模型拟合的基石（对应主 README §2.1），也是本仓库第一个方法学习模块。它本身并不执行变量选择——但其"不稀疏、方差膨胀"两大局限，正是后续变量选择方法发展的出发点。本文档按"背景与动机 → 数学原理 → 算法步骤 → 实现讲解 → 实验设计与结果分析 → 复现方式 → 关联文献"七段展开；配套代码见 [`ols.py`](ols.py)（从零实现，逐段讲解）与 [`experiment.py`](experiment.py)（三组可复现实验）。
 
+> **阅读前提与符号约定**：本文档可独立阅读——所有符号在此表定义，实验指标在 §5 评估指标说明表中统一定义（含 Jaccard、$R^2$ 等，无需翻其他文档），文献引用均为本文档 §7 的局部编号（每条后标注主 README §4 总编号）。未按顺序阅读的读者建议先读 §2（数学原理）再回看 §1；§5 的实验只使用本表符号。前置知识：线性代数基础（向量、矩阵乘法、正交投影）。
+>
+> | 符号 | 含义 | 定义位置 |
+> | :--- | :--- | :--- |
+> | $n$ | 样本数 | §2.1 |
+> | $p$ | 特征数（预测变量个数） | §2.1 |
+> | $X$ | $n\times p$ 设计矩阵（第 $i$ 行为 $x_i^\top$） | §2.1 |
+> | $y$ | $n\times 1$ 响应向量 | §2.1 |
+> | $\beta$ | $p\times 1$ 待估系数向量 | §2.1 |
+> | $\varepsilon$ | 误差向量（与机器精度 $\epsilon_{\text{mach}}$ 字形相近，文中按上下文区分） | §2.1 |
+> | $\hat\beta$ | 最小二乘系数估计 | §2.2 |
+> | $\hat y = X\hat\beta$ | 预测响应向量 | §3 |
+> | $e = y - X\hat\beta$ | 残差向量 | §2.1 |
+> | $S(\beta)$ | 残差平方和 $\|\|y - X\beta\|\|_2^2$ | §2.1 |
+> | $Q,\ R$ | QR 分解的正交阵与上三角阵 | §2.2 |
+> | $U,\ \Sigma,\ V$ | 奇异值分解的三个因子 | §2.2 |
+> | $\kappa = \mathrm{cond}(\cdot)$ | 矩阵条件数 | §3、§5.3 |
+> | $\epsilon_{\text{mach}}$ | 双精度机器精度（约 $2.2\times10^{-16}$） | §5.3 |
+
 ## 1. 背景与动机
 
 ### 1.1 要解决的问题
@@ -13,8 +32,8 @@ Legendre 在 1805 年出版的《计算彗星轨道的新方法》附录中给�
 ### 1.2 诞生背景：两条独立的发现路线
 
 - **Legendre（代数路线）**：从"如何度量总体误差"出发。绝对值和虽直观但不可导、难求解；平方和处处可导，求导后化为线性方程组——简洁、可操作，但他讲不清"为什么偏偏最优"。
-- **Gauss（概率路线）**：1809 年在《天体运动论》中把最小二乘与误差概率模型、最大似然联系起来，推动了正态误差模型在测量误差分析中的使用（正态分布在 Lagrange、Laplace 等人手中已有雏形，并非 Gauss 一人奠定）。Gauss 同时声称自己自 1795 年起便在使用此法，与 Legendre 的 1805 年公开发表形成著名的优先权争议；通常将公开发表优先权归于 Legendre，而 Gauss 的早期使用主张至今未有定论（史实梳理见 [53][54]）。
-- **最优性定理的成形**：Gauss 在 1821–1823 年的误差理论工作中证明了正态误差下最小二乘的最优性；Markov 于 1912 年将结果推广到不依赖正态假定的线性无偏估计类，形成今天所称的 **Gauss–Markov 定理**（现代标准表述见 [55][56]）。
+- **Gauss（概率路线）**：1809 年在《天体运动论》中把最小二乘与误差概率模型、最大似然联系起来，推动了正态误差模型在测量误差分析中的使用（正态分布在 Lagrange、Laplace 等人手中已有雏形，并非 Gauss 一人奠定）。Gauss 同时声称自己自 1795 年起便在使用此法，与 Legendre 的 1805 年公开发表形成著名的优先权争议；通常将公开发表优先权归于 Legendre，而 Gauss 的早期使用主张至今未有定论（史实梳理见 [5][6]）。
+- **最优性定理的成形**：Gauss 在 1821–1823 年的误差理论工作中证明了正态误差下最小二乘的最优性；Markov 于 1912 年将结果推广到不依赖正态假定的线性无偏估计类，形成今天所称的 **Gauss–Markov 定理**（现代标准表述见 [7][8]）。
 
 ### 1.3 为什么它是"变量选择"的起点
 
@@ -70,7 +89,7 @@ $$
 
 > **Gauss–Markov 定理**：在误差零均值、同方差、互不相关且 $X$ 固定的条件下，最小二乘估计 $\hat\beta$ 是所有线性无偏估计中方差最小的（Best Linear Unbiased Estimator, BLUE）。
 
-该定理回答"平方和为什么合理"：不需要假设误差分布形态，最小二乘已是线性无偏估计类中的最优者。标准教材表述见 [55][56]。
+该定理回答"平方和为什么合理"：不需要假设误差分布形态，最小二乘已是线性无偏估计类中的最优者。标准教材表述见 [7][8]。
 
 ### 2.5 正态误差下的最大似然等价
 
@@ -80,7 +99,7 @@ $$
 \ell(\beta) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\|y - X\beta\|_2^2 \tag{7}
 $$
 
-最大化 $\ell(\beta)$ 等价于最小化 $S(\beta)$——**最小二乘估计即最大似然估计**。这是 Gauss 概率路线的现代表述，也是正态线性模型文献的标准结论（见 [55]）。
+最大化 $\ell(\beta)$ 等价于最小化 $S(\beta)$——**最小二乘估计即最大似然估计**。这是 Gauss 概率路线的现代表述，也是正态线性模型文献的标准结论（见 [7]）。
 
 ### 2.6 解的存在性与唯一性
 
@@ -88,7 +107,7 @@ $X$ 列满秩时解唯一（式 5）。若 $X$ 秩亏（列相关或 $n<p$），
 
 ## 3. 算法步骤
 
-1. **中心化**：对 $X$、$y$ 按列/整体去均值。截距项通过对数据中心化实现，等效于设计矩阵加一列 1，但数值更稳（即 Frisch–Waugh–Lovell 定理的特例：中心化等价于对常数列做偏回归，见 [58][59]）；
+1. **中心化**：对 $X$、$y$ 按列/整体去均值。截距项通过对数据中心化实现，等效于设计矩阵加一列 1，但数值更稳（即 Frisch–Waugh–Lovell 定理的特例：中心化等价于对常数列做偏回归，见 [10][11]）；
 2. **选择数值解法**（三种路径在精确算术下等价，差别在数值稳定性与适用条件）：
 
    | 解法 | 公式 | 条件数行为 | 适用条件 |
@@ -107,7 +126,7 @@ $X$ 列满秩时解唯一（式 5）。若 $X$ 秩亏（列相关或 $n<p$），
    \text{SVD：}\quad X = U\Sigma V^\top, \qquad \hat\beta = V\Sigma^{-1}U^\top y \tag{9}
    $$
 
-   （$\Sigma^{-1}$ 中对小于截断阈值的奇异值置 $\infty$，即截断伪逆；数值线性代数经典参考见 [57]。）
+   （$\Sigma^{-1}$ 中对小于截断阈值的奇异值置 $\infty$，即截断伪逆；数值线性代数经典参考见 [9]。）
 
 3. **求解系数**：解三角/对角系统得到 $\hat\beta$，还原截距；
 4. **预测与评估**：$\hat y = X\hat\beta + b$；用 $R^2 = 1 - \mathrm{SS}_{res}/\mathrm{SS}_{tot}$ 与 MSE 评估。
@@ -150,11 +169,11 @@ $X$ 列满秩时解唯一（式 5）。若 $X$ 秩亏（列相关或 $n<p$），
 | :--- | :--- | :--- | :--- |
 | 预测 MSE | $\frac{1}{n}\sum_i (y_i - \hat y_i)^2$ | `lib.metrics.mse(y, y_pred)` | 拟合优度，越小越好；可与噪声方差比较，判断信号捕获程度 |
 | 系数 MSE | $\frac{1}{p}\sum_j (\hat\beta_j - \beta_j)^2$ | 同上，输入为估计系数与真系数 | 估计精度；仅真系数已知时可算，小即接近真值 |
-| tp / fp / fn | 支撑集交集与差集计数（$\lvert\beta\rvert > 10^{-8}$ 判为非零） | `lib.metrics.support_recovery` | tp=选中的真非零、fp=误选、fn=漏选 |
+| tp / fp / fn | 选中集合与真支撑集的交集/差集计数（真支撑集 = 数据生成中系数非零的变量集合，以 $\lvert\beta\rvert > 10^{-8}$ 判定） | `lib.metrics.support_recovery` | tp=选中的真非零、fp=误选、fn=漏选 |
 | precision | $\mathrm{tp}/(\mathrm{tp}+\mathrm{fp})$ | 由 tp/fp/fn 导出 | 选中项的纯度；低说明选入大量无关变量 |
 | recall | $\mathrm{tp}/(\mathrm{tp}+\mathrm{fn})$ | 同上 | 真变量的覆盖率；低说明遗漏真实信号 |
 | Jaccard | $\mathrm{tp}/(\mathrm{tp}+\mathrm{fp}+\mathrm{fn})$ | 同上 | 综合相似度，$[0,1]$，1 为完全恢复 |
-| $R^2$ | $1-\mathrm{SS}_{res}/\mathrm{SS}_{tot}$ | `OLS.score`（与 sklearn 未校正定义一致） | 响应变异中被模型解释的比例，越接近 1 越好 |
+| $R^2$ | $1-\mathrm{SS}_{res}/\mathrm{SS}_{tot}$（残差平方和/总平方和） | `OLS.score`（与 sklearn 未校正定义一致） | 响应变异中被模型解释的比例，越接近 1 越好 |
 | 相对系数误差 | $\lVert\hat\beta-\beta\rVert / \lVert\beta\rVert$ | `np.linalg.norm` 之比 | 实验三专用：无噪声下纯数值误差的度量 |
 | 条件数 $\mathrm{cond}(X)$ | $\sigma_{\max}/\sigma_{\min}$ | `np.linalg.cond` | 病态程度；越大，数值误差被放大越严重 |
 
@@ -192,7 +211,7 @@ $X$ 列满秩时解唯一（式 5）。若 $X$ 秩亏（列相关或 $n<p$），
 
 ### 5.2 实验二：diabetes 真实数据拟合与 sklearn 对拍
 
-**设置**：sklearn 内置 diabetes 数据（442 样本、10 特征，来源见 §7 文献 [24]），按 `seed=42` 随机划分 350 训练 / 92 测试，QR 解法、估计截距。
+**设置**：sklearn 内置 diabetes 数据（442 样本、10 特征，来源见 §7 文献 [4]），按 `seed=42` 随机划分 350 训练 / 92 测试，QR 解法、估计截距。
 
 | 指标 | 数值 |
 | :--- | :--- |
@@ -220,7 +239,7 @@ $X$ 列满秩时解唯一（式 5）。若 $X$ 秩亏（列相关或 $n<p$），
 
 ![实验三：条件数扫描下三种解法的数值稳定性](figures/fig3_numerical_stability.png)
 
-**分析**：结果与理论精确吻合——正规方程解法先形成 $X^\top X$，条件数被平方（$\kappa^2$：从 $10^0$ 到 $10^8$ 时误差从 1e-16 涨到 1.0，解已完全失真）；补充边界测试进一步发现，当 $\kappa^2$ 超过双精度倒数（约 $4.5\times10^{15}$，即 $\kappa \gtrsim 7\times10^{7}$）时，$X^\top X$ 进入数值奇异区间——LAPACK 可能直接抛出 `LinAlgError`，也可能不报错但返回完全错误的结果（实测 $\kappa=10^{10}$ 时相对误差约 1.0）：正规方程在强病态下不是"变差"而是"失效"。QR 与 SVD 不放大条件数，误差仅按 $\mathrm{cond}(X)$ 线性增长，全程保持在 1e-9 以下。**结论：病态问题（特征强相关）务必使用 QR 或 SVD，不要直接解正规方程**。这一教训同样适用于后续带惩罚的回归问题：应避免不必要地形成 $X^\top X$，并按算法选择恰当的数值线性代数工具（见 [57]）。
+**分析**：结果与理论精确吻合——正规方程解法先形成 $X^\top X$，条件数被平方（$\kappa^2$：从 $10^0$ 到 $10^8$ 时误差从 1e-16 涨到 1.0，解已完全失真）；补充边界测试进一步发现，当 $\kappa^2$ 超过双精度倒数（约 $4.5\times10^{15}$，即 $\kappa \gtrsim 7\times10^{7}$）时，$X^\top X$ 进入数值奇异区间——LAPACK 可能直接抛出 `LinAlgError`，也可能不报错但返回完全错误的结果（实测 $\kappa=10^{10}$ 时相对误差约 1.0）：正规方程在强病态下不是"变差"而是"失效"。QR 与 SVD 不放大条件数，误差仅按 $\mathrm{cond}(X)$ 线性增长，全程保持在 1e-9 以下。**结论：病态问题（特征强相关）务必使用 QR 或 SVD，不要直接解正规方程**。这一教训同样适用于后续带惩罚的回归问题：应避免不必要地形成 $X^\top X$，并按算法选择恰当的数值线性代数工具（见 [9]）。
 
 ### 5.4 小结
 
@@ -237,18 +256,18 @@ python methods/01-least-squares/experiment.py
 
 输出：`figures/` 下 4 张图（150 dpi PNG，由 `lib/plotting.py` 统一样式自动生成），`results/` 下 6 个结果文件（2 个 JSON 汇总 + 4 个 CSV 明细）。脚本与所在目录无关，可从任意工作目录运行；图表与数值均可由上述命令一键再生。
 
-## 7. 关联文献
+## 7. 本模块参考文献
 
-编号对应主 README §4 参考文献题录；方括号内为文献在本模块中的角色。
+本文档自足——正文中所有 [n] 均指本表；每条末尾括号内为主 README §4 的总编号（根文档收录全部 64 条题录及 PDF 获取状态，供延伸查阅）。
 
-1. Legendre, A. M. (1805). *Nouvelles méthodes pour la détermination des orbites des comètes*（附录首次发表并命名最小二乘法）。［题录已核验，PDF 待补］
-2. Gauss, C. F. (1809). *Theoria motus corporum coelestium in sectionibus conicis solem ambientium*（最小二乘与误差概率模型的早期联系）。［题录已核验，PDF 待补］
-3. Fisher, R. A. (1936). The use of multiple measurements in taxonomic problems. *Annals of Eugenics* 7(2): 179–188.［[PDF](../../papers/Fisher_1936_MultipleMeasurements.pdf)；同属主 README §2.1 思想萌芽期，本模块未使用其内容，列此供延伸阅读］
-24. Efron, B., Hastie, T., Johnstone, I., & Tibshirani, R. (2004). Least angle regression. *Annals of Statistics* 32(2): 407–499（实验二 diabetes 数据来源；另见 scikit-learn 数据集文档 https://scikit-learn.org/stable/datasets/toy_dataset.html#diabetes-dataset）。［[PDF](../../papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)］
-53. Stigler, S. M. (1981). Gauss and the invention of least squares. *The Annals of Statistics* 9(3): 465–474.［[PDF](../../papers/Stigler_1981_GaussInventionLeastSquares.pdf)；Legendre–Gauss 优先权争议专文，支撑 §1.2］
-54. Plackett, R. L. (1972). Studies in the history of probability and statistics. XXIX: The discovery of the method of least squares. *Biometrika* 59(2): 239–251.［题录已核验，PDF 待补；最小二乘发现史的标准专文］
-55. Seber, G. A. F., & Lee, A. J. (2003). *Linear Regression Analysis* (2nd ed.). Hoboken: Wiley.［题录已核验，PDF 待补；Gauss–Markov 定理与正态线性模型的标准教材表述，支撑 §2.4/§2.5］
-56. Rao, C. R. (1973). *Linear Statistical Inference and Its Applications*. New York: Wiley.［题录已核验，PDF 待补；Gauss–Markov 定理的经典陈述］
-57. Golub, G. H., & Van Loan, C. F. (2013). *Matrix Computations* (4th ed.). Baltimore: Johns Hopkins University Press.［题录已核验，PDF 待补；QR/SVD/条件数等数值线性代数内容，支撑 §3/§5.3］
-58. Frisch, R., & Waugh, F. V. (1933). Partial time regressions as compared with individual trends. *Econometrica* 1(4): 387–401.［题录已核验，PDF 待补］
-59. Lovell, M. C. (1963). Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association* 58(304): 993–1010.［题录已核验，PDF 待补；58+59 合称 Frisch–Waugh–Lovell 定理，支撑 §3 步骤 1 的中心化等价性］
+1. Legendre, A. M. (1805). *Nouvelles méthodes pour la détermination des orbites des comètes*（附录首次发表并命名最小二乘法）。［题录已核验，PDF 待补］（主 README §4 编号 1）
+2. Gauss, C. F. (1809). *Theoria motus corporum coelestium in sectionibus conicis solem ambientium*（最小二乘与误差概率模型的早期联系）。［题录已核验，PDF 待补］（主 README §4 编号 2）
+3. Fisher, R. A. (1936). The use of multiple measurements in taxonomic problems. *Annals of Eugenics* 7(2): 179–188.［[PDF](../../papers/Fisher_1936_MultipleMeasurements.pdf)；同属主 README §2.1 思想萌芽期，本模块未使用其内容，列此供延伸阅读］（主 README §4 编号 3）
+4. Efron, B., Hastie, T., Johnstone, I., & Tibshirani, R. (2004). Least angle regression. *Annals of Statistics* 32(2): 407–499（实验二 diabetes 数据来源；另见 scikit-learn 数据集文档 https://scikit-learn.org/stable/datasets/toy_dataset.html#diabetes-dataset）。［[PDF](../../papers/Efron_Hastie_Johnstone_Tibshirani_2004_LeastAngleRegression.pdf)］（主 README §4 编号 24）
+5. Stigler, S. M. (1981). Gauss and the invention of least squares. *The Annals of Statistics* 9(3): 465–474.［[PDF](../../papers/Stigler_1981_GaussInventionLeastSquares.pdf)；Legendre–Gauss 优先权争议专文，支撑 §1.2］（主 README §4 编号 53）
+6. Plackett, R. L. (1972). Studies in the history of probability and statistics. XXIX: The discovery of the method of least squares. *Biometrika* 59(2): 239–251.［题录已核验，PDF 待补；最小二乘发现史的标准专文］（主 README §4 编号 54）
+7. Seber, G. A. F., & Lee, A. J. (2003). *Linear Regression Analysis* (2nd ed.). Hoboken: Wiley.［题录已核验，PDF 待补；Gauss–Markov 定理与正态线性模型的标准教材表述，支撑 §2.4/§2.5］（主 README §4 编号 55）
+8. Rao, C. R. (1973). *Linear Statistical Inference and Its Applications*. New York: Wiley.［题录已核验，PDF 待补；Gauss–Markov 定理的经典陈述］（主 README §4 编号 56）
+9. Golub, G. H., & Van Loan, C. F. (2013). *Matrix Computations* (4th ed.). Baltimore: Johns Hopkins University Press.［题录已核验，PDF 待补；QR/SVD/条件数等数值线性代数内容，支撑 §3/§5.3］（主 README §4 编号 57）
+10. Frisch, R., & Waugh, F. V. (1933). Partial time regressions as compared with individual trends. *Econometrica* 1(4): 387–401.［题录已核验，PDF 待补］（主 README §4 编号 58）
+11. Lovell, M. C. (1963). Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association* 58(304): 993–1010.［题录已核验，PDF 待补；与 [10] 合称 Frisch–Waugh–Lovell 定理，支撑 §3 步骤 1 的中心化等价性］（主 README §4 编号 59）
