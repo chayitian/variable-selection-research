@@ -1,0 +1,124 @@
+{
+  "setting": {
+    "scale": {
+      "p_list": [
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "n_samples": 100,
+      "n_informative": 5,
+      "rho": 0.3,
+      "noise_std": 1.0,
+      "seed": 7
+    },
+    "instability": {
+      "B": 50,
+      "n_samples": 100,
+      "n_features": 20,
+      "n_informative": 5,
+      "rho": 0.3,
+      "noise_std": 3.0,
+      "seeds": "0..49",
+      "kmax": 12
+    }
+  },
+  "scale": [
+    {
+      "p": 6,
+      "exhaustive_evals": 63,
+      "branch_bound_evals": 23,
+      "ratio": 2.739130434782609
+    },
+    {
+      "p": 8,
+      "exhaustive_evals": 255,
+      "branch_bound_evals": 25,
+      "ratio": 10.2
+    },
+    {
+      "p": 10,
+      "exhaustive_evals": 1023,
+      "branch_bound_evals": 53,
+      "ratio": 19.30188679245283
+    },
+    {
+      "p": 12,
+      "exhaustive_evals": 4095,
+      "branch_bound_evals": 67,
+      "ratio": 61.11940298507463
+    },
+    {
+      "p": 14,
+      "exhaustive_evals": 16383,
+      "branch_bound_evals": 279,
+      "ratio": 58.72043010752688
+    },
+    {
+      "p": 16,
+      "exhaustive_evals": 65535,
+      "branch_bound_evals": 361,
+      "ratio": 181.53739612188366
+    }
+  ],
+  "instability": {
+    "k_star_mean": 7.28,
+    "k_star_hist": {
+      "5": 5,
+      "6": 16,
+      "7": 11,
+      "8": 5,
+      "9": 5,
+      "10": 7,
+      "11": 1
+    },
+    "resample_freq": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.14,
+      0.14,
+      0.18,
+      0.14,
+      0.06,
+      0.14,
+      0.18,
+      0.18,
+      0.1,
+      0.28,
+      0.18,
+      0.14,
+      0.16,
+      0.14,
+      0.12
+    ],
+    "freq_on_true_support": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "pairwise_jaccard": {
+      "mean": 0.6035123368694797,
+      "min": 0.3125,
+      "max": 1.0
+    },
+    "jaccard_vs_true": {
+      "mean": 0.7209559884559884,
+      "std": 0.15410552172676167
+    },
+    "control_scale_invariance": {
+      "cp_identical_for_k_ge_true": true,
+      "same_selection": true,
+      "k_star_noise1": 6,
+      "k_star_noise3": 6,
+      "max_cp_abs_diff_k_ge_true": 7.105427357601002e-14
+    }
+  }
+}

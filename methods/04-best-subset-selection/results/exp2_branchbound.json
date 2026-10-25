@@ -1,0 +1,16 @@
+{
+  "setting": {
+    "instances": 20,
+    "configs": "[(12, 4), (12, 2), (14, 3), (14, 5)]，各 5 个实例",
+    "n_samples": 100,
+    "rho": 0.3,
+    "noise_std": 1.0
+  },
+  "all_consistent": true,
+  "max_rss_abs_diff": 0.0,
+  "eval_ratio": {
+    "mean": 44.330439159991755,
+    "min": 9.328018223234624,
+    "max": 140.02564102564102
+  }
+}
