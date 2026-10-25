@@ -1,0 +1,26 @@
+{
+  "setting": {
+    "R": 200,
+    "n_samples": 100,
+    "n_features": 12,
+    "n_informative": 4,
+    "rho": 0.3,
+    "noise_std": 1.0,
+    "kmax": 10,
+    "seeds": "0..199"
+  },
+  "true_k": 4,
+  "k_star_mean": 5.27,
+  "k_star_std": 1.1519982638875808,
+  "k_star_counts": {
+    "4": 58,
+    "5": 70,
+    "6": 44,
+    "7": 19,
+    "8": 6,
+    "9": 3
+  },
+  "p_under": 0.0,
+  "p_exact": 0.29,
+  "p_over": 0.71
+}

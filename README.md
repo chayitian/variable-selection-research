@@ -36,6 +36,7 @@
 | 02 | Fisher 判别分析（FDA） | 01 | 已完成 | [methods/02-fisher-discriminant/](methods/02-fisher-discriminant/) |
 | 03 | 逐步选择法（Stepwise Selection） | 01 | 已完成 | [methods/03-stepwise-selection/](methods/03-stepwise-selection/) |
 | 04 | 全子集选择与分支定界（Best Subset & B&B） | 01 | 已完成 | [methods/04-best-subset-selection/](methods/04-best-subset-selection/) |
+| 05 | Mallows Cp 与模型定模准则 | 04 | 已完成 | [methods/05-mallows-cp/](methods/05-mallows-cp/) |
 
 各方法文档均可独立阅读：符号、实验指标与参考文献都在文档内自足（文献使用模块内局部编号，每条后标注本表 §4 的总编号）；“前置”列标注建议先读的模块——不按顺序阅读的读者从任意一个模块进入都不会遇到未定义符号。
 
